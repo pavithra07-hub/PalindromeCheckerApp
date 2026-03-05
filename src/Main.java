@@ -1,75 +1,35 @@
 import java.util.Scanner;
 
-class Node {
-    char data;
-    Node next;
+class CaseInsensitivePalindromeChecker {
 
-    Node(char data) {
-        this.data = data;
-        this.next = null;
-    }
-}
+    static boolean isPalindrome(String str) {
+        int left = 0;
+        int right = str.length() - 1;
 
-class PalindromeCheckerLL {
-
-    static Node createList(String s) {
-        Node head = null, tail = null;
-        for (char c : s.toCharArray()) {
-            Node newNode = new Node(c);
-            if (head == null) {
-                head = tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-        return head;
-    }
-
-    static Node reverse(Node head) {
-        Node prev = null, curr = head;
-        while (curr != null) {
-            Node next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;
-        }
-        return prev;
-    }
-
-    static boolean isPalindrome(Node head) {
-        if (head == null || head.next == null) return true;
-
-        Node slow = head, fast = head;
-
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-
-        Node secondHalf = reverse(slow);
-        Node firstHalf = head;
-
-        while (secondHalf != null) {
-            if (firstHalf.data != secondHalf.data)
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
                 return false;
-            firstHalf = firstHalf.next;
-            secondHalf = secondHalf.next;
+            }
+            left++;
+            right--;
         }
-
         return true;
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter string: ");
-        String input = sc.nextLine().toLowerCase().replaceAll("\\s+", "");
 
-        Node head = createList(input);
+        System.out.print("Enter a string: ");
+        String input = sc.nextLine();
 
-        if (isPalindrome(head))
+        // Normalize string (ignore spaces & case)
+        String normalized = input.toLowerCase().replaceAll("\\s+", "");
+
+        if (isPalindrome(normalized))
             System.out.println("Palindrome");
         else
             System.out.println("Not a Palindrome");
+
+        sc.close();
     }
 }
